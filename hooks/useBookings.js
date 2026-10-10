@@ -1,17 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { listenToActiveBookings, listenToRooms } from "@/lib/bookings";
+import { useEffect, useMemo, useState } from "react";
+import { listenToBookings, listenToRooms } from "@/lib/bookings";
+import { DEFAULT_OWNER_UID } from "@/lib/config";
+import { useAuth } from "@/components/AuthProvider";
+import { sameDay, startOfDayLocal } from "@/lib/dates";
 
-// Live bookings plus a room lookup, each with loading and error state.
+// Live bookings and rooms from the booking system, plus the groups the screens need.
 export function useBookings() {
+  const { profile } = useAuth();
+  const ownerUid = profile?.ownerUid || DEFAULT_OWNER_UID || "";
   const [bookings, setBookings] = useState([]);
-  const [rooms, setRooms] = useState({});
+  const [rooms, setRooms] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const unsubBookings = listenToActiveBookings(
+    const unsubB = listenToBookings(
+      ownerUid,
       (list) => {
         setBookings(list);
         setLoading(false);
@@ -21,18 +27,32 @@ export function useBookings() {
         setLoading(false);
       }
     );
-    const unsubRooms = listenToRooms(setRooms, () => {});
+    const unsubR = listenToRooms(ownerUid, setRooms, () => {});
     return () => {
-      unsubBookings();
-      unsubRooms();
+      unsubB();
+      unsubR();
     };
-  }, []);
+  }, [ownerUid]);
 
-  // Fill in the room name from the rooms collection when the booking has only an ID
-  const withRooms = bookings.map((b) => ({
-    ...b,
-    roomLabel: (b.roomId && rooms[b.roomId]?.name) || b.roomName || "-",
-  }));
+  const groups = useMemo(() => {
+    const today = startOfDayLocal(new Date());
+    const live = bookings.filter((b) => b.status === "approved" && b.stayStatus !== "checked-out");
+    const staying = live.filter(
+      (b) => b.stayStatus === "checked-in" || (b.checkIn && b.checkOut && b.checkIn <= today && b.checkOut > today)
+    );
+    return {
+      arriving: live.filter((b) => b.stayStatus !== "checked-in" && sameDay(b.checkIn, today)),
+      departing: live.filter((b) => sameDay(b.checkOut, today)),
+      staying,
+      upcoming: live.filter((b) => b.checkIn && b.checkIn > today),
+      pending: bookings.filter((b) => b.status === "pending"),
+      unpaid: live.filter((b) => b.paymentStatus !== "paid"),
+    };
+  }, [bookings]);
 
-  return { bookings: withRooms, rooms, loading, error };
+  const totalRooms = rooms.length;
+  const occupancy =
+    totalRooms > 0 ? Math.min(100, Math.round((groups.staying.length / totalRooms) * 100)) : null;
+
+  return { bookings, rooms, groups, totalRooms, occupancy, loading, error };
 }

@@ -87,14 +87,14 @@ export default function StaffPage() {
     <ProtectedPage roles={["admin"]} title="Staff">
       <form
         onSubmit={addStaff}
-        className="mb-8 grid gap-3 rounded-xl border border-slate-200 bg-white p-5 sm:grid-cols-2 lg:grid-cols-5"
+        className="mb-8 grid gap-3 rounded-xl border border-line bg-white p-5 sm:grid-cols-2 lg:grid-cols-5"
       >
         <input
           required
           placeholder="Full name"
           value={form.name}
           onChange={(e) => setForm({ ...form, name: e.target.value })}
-          className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+          className="rounded-md border border-line px-3 py-2 text-sm"
         />
         <input
           required
@@ -102,7 +102,7 @@ export default function StaffPage() {
           placeholder="Email"
           value={form.email}
           onChange={(e) => setForm({ ...form, email: e.target.value })}
-          className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+          className="rounded-md border border-line px-3 py-2 text-sm"
         />
         <input
           required
@@ -111,12 +111,12 @@ export default function StaffPage() {
           placeholder="Temporary password"
           value={form.password}
           onChange={(e) => setForm({ ...form, password: e.target.value })}
-          className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+          className="rounded-md border border-line px-3 py-2 text-sm"
         />
         <select
           value={form.role}
           onChange={(e) => setForm({ ...form, role: e.target.value })}
-          className="rounded-md border border-slate-300 px-3 py-2 text-sm"
+          className="rounded-md border border-line px-3 py-2 text-sm"
         >
           {ROLES.map((r) => (
             <option key={r} value={r}>
@@ -144,9 +144,9 @@ export default function StaffPage() {
         </p>
       )}
 
-      <div className="overflow-x-auto rounded-xl border border-slate-200 bg-white">
+      <div className="overflow-x-auto rounded-xl border border-line bg-white">
         <table className="w-full text-left text-sm">
-          <thead className="bg-slate-50 text-slate-500">
+          <thead className="bg-cream text-soft">
             <tr>
               <th className="px-4 py-2 font-medium">Name</th>
               <th className="px-4 py-2 font-medium">Email</th>
@@ -158,15 +158,15 @@ export default function StaffPage() {
             {staff.map((s) => {
               const isMe = s.id === user?.uid;
               return (
-                <tr key={s.id} className="border-t border-slate-100">
-                  <td className="px-4 py-2 text-slate-800">{s.name || "-"}</td>
-                  <td className="px-4 py-2 text-slate-600">{s.email || "-"}</td>
+                <tr key={s.id} className="border-t border-line">
+                  <td className="px-4 py-2 text-ink">{s.name || "-"}</td>
+                  <td className="px-4 py-2 text-soft">{s.email || "-"}</td>
                   <td className="px-4 py-2">
                     <select
                       value={s.role}
                       disabled={isMe}
                       onChange={(e) => updateStaff(s.id, { role: e.target.value })}
-                      className="rounded-md border border-slate-300 px-2 py-1 disabled:bg-slate-100"
+                      className="rounded-md border border-line px-2 py-1 disabled:bg-sage-100"
                     >
                       {ROLES.map((r) => (
                         <option key={r} value={r}>
@@ -188,7 +188,7 @@ export default function StaffPage() {
             })}
             {staff.length === 0 && (
               <tr>
-                <td colSpan={4} className="px-4 py-6 text-center text-slate-500">
+                <td colSpan={4} className="px-4 py-6 text-center text-soft">
                   No staff yet.
                 </td>
               </tr>

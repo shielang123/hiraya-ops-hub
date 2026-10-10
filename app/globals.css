@@ -3,5 +3,8 @@
 @tailwind utilities;
 
 body {
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background: #fdf7f1;
+  color: #1c140c;
+  font-family: var(--font-sans), Inter, system-ui, sans-serif;
 }
+h1, h2, h3 { font-family: var(--font-display), var(--font-sans), system-ui, sans-serif; }

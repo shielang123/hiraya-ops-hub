@@ -29,7 +29,8 @@ match /staff/{uid} {
 }
 
 // Phase 1 only READS bookings and rooms. Phase 2 will add limited updates.
-match /bookings/{bookingId} {
+// The booking site stores guest bookings in the `guestbooking` collection.
+match /guestbooking/{bookingId} {
   allow read: if isStaff();
 }
 

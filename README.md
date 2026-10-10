@@ -1,4 +1,4 @@
-# Hiraya Ops Hub (Phase 1)
+# Hiraya Ops Hub
 
 Staff app for Hiraya Farm Resort. It uses the same Firebase project as the Resort Booking system
 (`hotel-63c74`), so approved bookings show up here live.
