@@ -1,0 +1,38 @@
+// HUB ADDITIONS FOR FIRESTORE RULES (Phase 1)
+//
+// Do NOT replace your existing rules with this file. The booking site depends on them.
+// Open Firebase console > Firestore Database > Rules, then paste the helper functions and the
+// match blocks below INSIDE your existing:  match /databases/{database}/documents { ... }
+//
+// Firestore allows a request when ANY matching rule allows it, so these blocks add staff access
+// without removing what the booking site already has.
+
+function staffDoc() {
+  return get(/databases/$(database)/documents/staff/$(request.auth.uid)).data;
+}
+
+function isStaff() {
+  return request.auth != null
+    && exists(/databases/$(database)/documents/staff/$(request.auth.uid))
+    && staffDoc().active == true;
+}
+
+function isAdmin() {
+  return isStaff() && staffDoc().role == 'admin';
+}
+
+// Each person can read their own staff profile; admins can read and manage everyone.
+match /staff/{uid} {
+  allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
+  allow create, update: if isAdmin();
+  allow delete: if false;
+}
+
+// Phase 1 only READS bookings and rooms. Phase 2 will add limited updates.
+match /bookings/{bookingId} {
+  allow read: if isStaff();
+}
+
+match /rooms/{roomId} {
+  allow read: if isStaff();
+}
