@@ -43,37 +43,37 @@ export default function LoginPage() {
   const shownError = localError || error;
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-slate-50 px-4">
+    <div className="flex min-h-screen items-center justify-center bg-cream px-4">
       <form
         onSubmit={onSubmit}
-        className="w-full max-w-sm space-y-4 rounded-xl border border-slate-200 bg-white p-6 shadow-sm"
+        className="w-full max-w-sm space-y-4 rounded-xl border border-line bg-white p-6 shadow-sm"
       >
         <div>
-          <h1 className="text-xl font-semibold text-brand-700">Hiraya Ops Hub</h1>
-          <p className="text-sm text-slate-500">Staff sign in</p>
+          <h1 className="font-display text-2xl font-bold text-brand-600">Hiraya Ops Hub</h1>
+          <p className="text-sm text-soft">Staff sign in</p>
         </div>
 
         <label className="block text-sm">
-          <span className="text-slate-700">Email</span>
+          <span className="text-ink">Email</span>
           <input
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             autoComplete="username"
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-brand-500"
+            className="mt-1 w-full rounded-md border border-line px-3 py-2 outline-none focus:border-brand-500"
           />
         </label>
 
         <label className="block text-sm">
-          <span className="text-slate-700">Password</span>
+          <span className="text-ink">Password</span>
           <input
             type="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
-            className="mt-1 w-full rounded-md border border-slate-300 px-3 py-2 outline-none focus:border-brand-500"
+            className="mt-1 w-full rounded-md border border-line px-3 py-2 outline-none focus:border-brand-500"
           />
         </label>
 
@@ -84,7 +84,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={busy}
-          className="w-full rounded-md bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700 disabled:opacity-60"
+          className="w-full rounded-lg bg-brand-600 px-4 py-2 font-medium text-white hover:bg-brand-700 disabled:opacity-60"
         >
           {busy ? "Signing in..." : "Sign in"}
         </button>

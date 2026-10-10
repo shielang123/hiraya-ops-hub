@@ -18,7 +18,7 @@ export default function ProtectedPage({ roles, title, children }) {
 
   if (loading || !user) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-slate-500">
+      <div className="flex min-h-screen items-center justify-center text-soft">
         Loading...
       </div>
     );
@@ -28,7 +28,7 @@ export default function ProtectedPage({ roles, title, children }) {
     <Shell>
       {canAccess(role, roles) ? (
         <>
-          {title && <h1 className="mb-6 text-2xl font-semibold text-slate-800">{title}</h1>}
+          {title && <h1 className="mb-6 font-display text-2xl font-bold text-brand-600">{title}</h1>}
           {children}
         </>
       ) : (
